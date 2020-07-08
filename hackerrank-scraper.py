@@ -7,22 +7,10 @@
 
 import requests
 
-LOGIN_DATA = {
-    'login': 'abhishek252167@gmail.com',
-    'password': '',
-    'remember_me': True,
-    'fallback': False
-}
-LOGIN_URL = 'https://www.hackerrank.com/auth/login'
-POST_URL = 'https://www.hackerrank.com/rest/auth/login'
-
 HEADER = {
+    'cookie': '_hrank_session=zzz40c18c2b5f6692f5e6fa1q230fd953200f9random620ffq4be6b9bdb07e61ee4605d9efa0e8df420re0dc35ec7aa0d20d35f17a2b9d5aa378fool3a95cf7de23;'
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 }
-session = requests.session()
-session.get(LOGIN_URL, headers=HEADER)
-# cookie_string = '; '.join([str(x) + '=' + str(y) for x, y in session.cookies.items()])
-HEADER['cookie'] = f'_hrank_session={session.cookies.get_dict()["_hrank_session"]};'
-login = session.post(LOGIN_URL, data=LOGIN_DATA, headers=HEADER)
-print(login.text)
-# HEADER['x-csrf-token'] = login.json()['csrf_token']
+api = 'https://www.hackerrank.com/rest/contests/master/challenges/jim-and-the-orders/submissions/135878037'
+r = session.get(api, headers=HEADER)
+print(r.text)
