@@ -29,11 +29,13 @@ challenges = None
 while True:
     # api = 'https://www.hackerrank.com/rest/hackers/Abhishek_G0YAL/recent_challenges?limit=221&response_version=v1'
     api = 'https://www.hackerrank.com/rest/hackers/Abhishek_G0YAL/recent_challenges?limit={limit}&response_version={version}&cursor={cursor}'
+    print(api.format(limit=16, version='v2', cursor= challenges['cursor'] if challenges else ''))
     r = requests.get(api.format(limit=16, version='v2', cursor= challenges['cursor'] if challenges else ''), headers=HEADER)
     challenges = r.json()
     for challenge in challenges['models']:
-        api = 'https://www.hackerrank.com/rest/contests/master/challenges/{ch_slug}/submissions/?&offset={offset}&limit={limit}'
-        r = requests.get(api.format(ch_slug=challenge['ch_slug'], offset=0, limit=12), headers=HEADER)
+        api = f'https://www.hackerrank.com/rest/contests/{challenge["con_slug"]}/challenges/{challenge["ch_slug"]}/submissions/?&offset={0}&limit={12}'
+        print(api)
+        r = requests.get(api, headers=HEADER)
         submissions = r.json()
         submission_to_save = submissions['models'][0]
         for submission in submissions['models']:
@@ -41,16 +43,17 @@ while True:
                 submission_to_save = submission
         submission_content = False
         while not submission_content:
-            api = 'https://www.hackerrank.com/rest/contests/master/challenges/{ch_slug}/submissions/{submission_id}'
-            r = requests.get(api.format(ch_slug=submission_to_save['challenge']['slug'], submission_id=submission_to_save['id']), headers=HEADER)
-            print(api.format(ch_slug=submission_to_save['challenge']['slug'], submission_id=submission_to_save['id']))
+            api = f'https://www.hackerrank.com/rest/contests/{challenge["con_slug"]}/challenges/{submission_to_save["challenge"]["slug"]}/submissions/{submission_to_save["id"]}'
+            print(api)
+            r = requests.get(api, headers=HEADER)
             submission_content = r.json()['model']
             if not submission_content:
-                time.sleep(15)
+                time.sleep(18)
         file_name = get_valid_filename(submission_to_save['challenge']['name'].replace('-', '_')) + '.' + get_ext(submission_content['language'])
         print(file_name)
+        contest_url = f'/contests/{challenge["con_slug"]}' if challenge['con_slug'] != 'master' else ''
         with open(path + file_name, 'w') as f:
-            f.write(f'// https://www.hackerrank.com/challenges/{challenge["ch_slug"]}/problem\n' \
+            f.write(f'// https://www.hackerrank.com{contest_url}/challenges/{challenge["ch_slug"]}/problem\n' \
                 + '// ' + submission_content['status'] + '\n\n' + submission_content['code'])
     if challenges['last_page']:
         break
