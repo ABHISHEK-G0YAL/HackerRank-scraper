@@ -45,7 +45,8 @@ def save_to_file(challenge, submission_to_save, submission_content):
     contest_url = f'/contests/{challenge["con_slug"]}' if challenge['con_slug'] != 'master' else ''
     with open(path + file_name, 'w') as f:
         f.write(f'// https://www.hackerrank.com{contest_url}/challenges/{challenge["ch_slug"]}/problem\n' \
-            + '// ' + submission_content['status'] + '\n\n' + submission_content['code'])
+            + ('// ' + submission_content['status'] + '\n' if submission_content['status'] != 'Accepted' \
+                else '') + '\n' + submission_content['code'])
 
 def get_submission_content(challenge, submission_to_save):
     submission_content = False
