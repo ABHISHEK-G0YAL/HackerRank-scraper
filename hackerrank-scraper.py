@@ -3,6 +3,7 @@ import time
 import requests
 
 DEBUG = False
+USERNAME = 'Abhishek_G0YAL'
 HEADER = {
     'cookie': '_hrank_session=5b84erandom0c3ff722563random9fe3be39ac9random2e226d569f56erandom5d79920e1d3ccrandomc3a4d88389brandom15e38f69a4217arandom1aed9338;',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
@@ -74,7 +75,7 @@ def get_challenge_submissions(challenge):
 
 def get_recent_challenges(cursor):
     # api = 'https://www.hackerrank.com/rest/hackers/Abhishek_G0YAL/recent_challenges?limit=221&response_version=v1'
-    api = f'https://www.hackerrank.com/rest/hackers/Abhishek_G0YAL/recent_challenges?limit={16}&response_version={"v2"}&cursor={cursor}'
+    api = f'https://www.hackerrank.com/rest/hackers/{USERNAME}/recent_challenges?limit={16}&response_version={"v2"}&cursor={cursor}'
     watch(api)
     r = requests.get(api, headers=HEADER)
     return r.json()
